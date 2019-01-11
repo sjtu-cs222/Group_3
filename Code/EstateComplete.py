@@ -45,5 +45,7 @@ for t in range(epoch):
 x_np = np.array(x_axis)
 y_np = np.array(y_axis)
 plt.figure()
+plt.xlabel('epoches')
+plt.ylabel('loss')
 plt.plot(x_np, y_np, color='green', linewidth=0.5, linestyle='-')
 plt.show()
