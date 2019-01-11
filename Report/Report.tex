@@ -1,0 +1,287 @@
+\documentclass[twoside,twocolumn]{article}
+
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage[ruled]{algorithm2e}
+
+\usepackage{blindtext} % Package to generate dummy text throughout this template 
+
+\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\linespread{1.05} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+
+\usepackage[english]{babel} % Language hyphenation and typographical rules
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+
+\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
+
+\usepackage{enumitem} % Customized lists
+\setlist[itemize]{noitemsep} % Make itemize lists more compact
+
+\usepackage{abstract} % Allows abstract customization
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
+
+\usepackage{titlesec} % Allows customization of titles
+\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+\renewcommand\thesubsection{\roman{subsection}} % roman numerals for subsections
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+
+\usepackage{titling} % Customizing the title section
+
+\usepackage{hyperref} % For hyperlinks in the PDF
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\setlength{\droptitle}{-4\baselineskip} % Move the title up
+
+\pretitle{\begin{center}\Huge\bfseries} % Article title formatting
+\posttitle{\end{center}} % Article title closing formatting
+\title{Privacy-Preserving Method for Neural Network Training }
+\author{%
+\textsc{Can Tu, Yuchen Ding}\thanks{Group3} \\[1ex] % Your name
+\normalsize Shanghai Jiaotong University \\
+%\and % Uncomment if 2 authors are required, duplicate these 4 lines if more
+%\textsc{Jane Smith}\thanks{Corresponding author} \\[1ex] % Second author's name
+%\normalsize University of Utah \\ % Second author's institution
+%\normalsize \href{mailto:jane@smith.com}{jane@smith.com} % Second author's email address
+}
+\date{\today} % Leave empty to omit a date
+
+\begin{document}
+
+% Print the title
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+With the development of cloud-computing device, in practice multiple parties may collaborate through neural network training on the union of their respective data sets. Thus, it is more convenient for users across the Internet to conduct collaborative learning.
+
+In such distributed environment, the protection of data privacy for each participant becomes a big issue. In many situations like security department and medical researches, the privacy of the original data must be protected according to some privacy rules. So in pursuit of embracing the joint learning, it is imperative to provide a solution that allow users to conduct collaborative learning without exposure of their private data.
+
+Challenges. In order to provide practical solutions for privacy-preserving neural network learning, three main challenges need to be met simultaneously: 1) Secure computation of various operations, e.g. addition, scalar product and the nonlinear sigmoid function, which are needed by the network algorithm; 2) To ensure the practicality of the proposed solution, the computation/communication cost introduced to each participant shall be affordable; 3) For collaborative training, the training data sets may be owned by different parties and partitioned in arbitrary ways rather than a single way of partition.
+
+In our proposed method, we focus on multilayer neural network. In some referenced work, gradient-descent methods are used to ensure privacy-perservation. But for multilayer neural network model, gradient-descent methods are elegant in its generality and restricted in practice for such simple model. Our method is based on two-party distributed algorithm for privacy-preserving backpropagation training.
+
+\section{Background and Related Works}
+Few privacy-preserving neural network learning schemes have been proposed, which are used for our reference and we benefit a lot from them. The notion of privacy-preserving data mining problem was proposed in 2000. Two different papers solved the problem that privacy constraints on distributed environment. Agrawal et al. proposed randomization to preserve sensitive data, in other words add noise to original data, at the cost of accuracy. Lindell and Pinkas introduced cryptographic tools for higher accuracy but the computation complexity is respectively giant when data becomes larger. And after the two papers, a lot of work have been done in data mining with privacy constraints such as clustering, classification.
+
+Constraints for existing solutions in data mining is that most of them are randomization-based approches, which result in the privacy generally was limited to some extent. Cryptography-based approaches provide better accuracy and privacy guarantee compared to randomization-based schemes. But the computation process can be tarnally pursuming.
+
+For privacy preserving neural network learning, few work have been done. Barni et al proposed security algorithms for three scenarios in neural networks. Chen and Zhong [6] propose privacy preserving back-propagation neural network learning algorithm when training data is vertically partitioned. Their algorithm provides strong privacy guaranty to the participants. The solution when the training data is horizontally partitioned data is much easier since all the data holders can train the neural network in turns.
+
+\section{Motivation}
+Our motivation comes from the limitations of accuracy and effeciency for existing works. In order to improve the computation rate and promising accuracy, we use a three-layer network as our model, so when the data set become larger, our training time can be guaranteed.
+
+\section{Problem Formulation}
+\subsection{Semihonest Model}
+As many existing reference paper we have found, we use semihonest model in our method. Semihonest model is a standard adversary model in cryptography.
+
+When computing function in a distributed fashion, semihonest model requires that each party that participates in the computation follow the algorithm, but a party may try to learn additional information by analyzing the messages that she receives during the execution. In order to guarantee the security of distributed algorithm of computing , it must be ensured that each party can learn nothing beyond what can be implied by its own input and
+output.
+
+Based on semihonest model, our problem of privacy-preserving neural network learning is stated below.
+
+\subsection{Privacy-Preserving Two-Party Distributed Neural Network Learning}
+Suppose that a set of training samples are vertically partitioned between two parties A and B. A holds a data set D$_1$ with m$_A$ attributes for each data entry. B holds a data set D$_2$ with m$_B$ attributes for each data entry. We denote one data entry in D$_1$ as x$_A$=(x$_1$,x$_2$,...,x$_{mA}$) and in D$_2$ x$_A$=(x$_{mA+1}$,...,x$_{mA+mB}$).
+
+Privacy-preserving two-party distributed neural network training is that, in each round of neural network learning, two parties jointly compute the additive values of connection weights without compromising their privacy of input data. Formally, with training samples x$_A$ and x$_B$ from party A and B, respectively, and a target value t(x),  our goal is to let each party get her own share of the additive value of each weight $\Delta$w, without revealing the original training data x$_A$ or x$_B$ to each other.
+
+\section{Proposed Methods}
+Firstly we present a privacy-preserving distriuted algorithm for training the neural networks with backpropagation algorithm.
+
+Different steps and details will be introduced later.
+\subsection{Privacy-Preserving Neural Network Training Algorithm}
+As we mentioned in the preamble, we use a neural network of three layers simply, where the hidden-layer activation function is sigmoid and the output-layer is linear.
+
+Back-Propagation neural network learning algorithm is mainly composed of two stages: feed forward and error back−propagation. Given a neural network with a-b-c configuration, one input vector is denoted as (x$_1$,x$_2$,...,x$_a$). The values of hidden-layer nodes are denoted as (h$_1$,h$_2$,...,h$_b$), and the values of output-layer nodes are (o$_1$,o$_2$,...,o$_c$). w$^h$$_{jk}$ denotes the weight connecting the input-layer node k and the hidden-layer node j. w$^o$$_{ij}$ denotes the weight connecting j and the output-layer node i, where 1 $\le$ k $\le$ a, 1 $\le$ j $\le$ b, 1 $\le$ i $\le$ c.
+
+We use mean square error(MSE) as the error function in the backpropagation algorithm e = 1/2 $\sum_{i}(t_i-o_i)^2$.\\
+
+\includegraphics[height=35pt]{1.png}\\
+~\\
+
+For each training iteration,the input of the privacy-preserving backpropagation training algorithm is ({x$_A$,x$_B$},t(x)), where x$_A$ is held by party A, while x$_B$ is held by party B. t(x) is the target vector of the current training data and it is known to both parties. The output of algorithm is the connection weights of output layer and hidden layer.
+
+The main idea of the algorithm is to secure each step in the nonprivacy-preserving backpropagation algorithm, with two stages, feedforward and backpropagation. In each step, neither the input data from the other party nor the intermediate results can be revealed. Morever, we use the piecewise linear approximation to compute the sigmoid function, which will be introduced later.
+
+To hide the intermediate results such as the values of hidden-layer nodes, the two parties randomly share each result so that neither of the two parities can imply the original data
+information from the intermediate results. Here by “randomly share,” we mean that each party holds a random number and the sum of the two random numbers equals to the intermediate
+result. Note that with intermediate results randomly shared among two parties, the learning process can still securely carry on to produce the correct learning result.
+
+After the entire process of private training, without revealing any raw data to each other, the two parties jointly establish a neural network representing the properties of the union data set.
+~\\
+~\\
+~\\
+
+\begin{algorithm}
+	\caption{Privacy-Preserving Distributed Algorithm for Backpropagation Training}
+	
+	{\bfseries Initialize} all weights to small random numbers, and make them known to both parties.
+	
+	{\bfseries For} all trainint sample do
+	
+	{\bfseries Step 1: feedforward stage}
+	\begin{flushleft}
+	\quad 1. For each hidden layer node h$_j$, party A computes $\sum_{k<m_A}(w^h_{jk})$x$_k$, and party B computes $\sum_{m_A<k<m_A+m_B}(w^h_{jk})$x$_k$.\\
+	\quad 2. Using piecewise linear approximation, parties A and B jointly compute the sigmoid function for each hidden-layer node h$_j$, obtaining the random shares h$_{j1}$ and h$_{j2}$. h$_{j1}$ + h$_{j2}$ = f($\sum_{k}(w^h_{jk})$x$_k$).\\
+	\quad 3. For each output layer node o$_i$, party A computes o$_{i1}$ = $\sum_{i}(w^o_{ij})$h$_{j1}$ and party B computes o$_{i2}$ = $\sum_{i}(w^o_{ij})$h$_{j2}$. o$_i$ = o$_{i1}$+o$_{i2}$ = $\sum_{i}(w^o_{ij})$h$_{j1}$+$\sum_{i}(w^o_{ij})$h$_{j2}$.
+	\end{flushleft}
+	
+	{\bfseries Step 2: backpropagation stage}
+	\begin{flushleft}
+		\quad 1. For each output layer weight w$^o_{ij}$, parties A and B securely compute the product h$_{j1}$o$_{i2}$, obtaining random shares r$_11$ and r$_12$. Similarly, they compute the random partitions of h$_{j2}$o$_{i1}$, r$_21$, r$_22$. Parrt A computes $\Delta$$_1$w$^o_{ij}$ = (o$_{i1}$-t$_i$)h$_{j1}$ + r$_{11}$ + r$_{21}$ and Party B computes $\Delta$$_2$w$^o_{ij}$ = (o$_{i2}$-t$_i$)h$_{j2}$ + r$_{12}$ + r$_{22}$.\\
+		\quad 2. For each hidden layer weight w$^h_{jk}$, parties A and B jointly compute random shares q$_1$ and q$_2$. If k $\le$ m$_A$, get x$_k$q$_2$ = r$_{61}$+r$_{62}$. Then, $\Delta$$_1$w$^h_{jk}$ = q$_1$x$_k$+r$_{61}$ and $\Delta$$_2$w$^o_{ij}$ = r$_{62}$. If m$_A$<x$_k$ $\le$ m$_A$+m$_B$, $\Delta$$_1$w$^h_{jk}$ = r$_61$ and $\Delta$$_2$w$^o_{ij}$ = q$_2$x$_k$+r$_{62}$.\\
+		\quad 3. A (Similarly for B) sends $\Delta$$_1$w$^o_{ij}$ and $\Delta$$_1$w$^h_{jk}$ to B. Then A and B compute for each hidden-layer weight and each output-layer weight.
+		
+	\end{flushleft}
+
+\end{algorithm}
+~\\
+
+So using Algorithm 1, the hidden-layer weights can be updated correctly by two parties without compromising their data privacy.
+
+\subsection{Securely Computing the Linear Sigmoid Function}
+Cryptographic tools work in finite fields and thus cannot be directly applied to the secure computation of functions such as sigmoid. Approximating the activation function in a piecewise way offers us an opportunity to apply cryptographic tools to make the computation of sigmoid function privacy preserving.
+
+The following equation is a piecewise linear approximation of the sigmoid function 1/1+e$^-x$.
+
+\begin{equation}
+y(x)=\left\{
+\begin{array}{rcl}
+1 & & {x>8}\\
+0.015625x+0.875 & & {4<x\le8}\\
+0.03125x+0.8125 & & {2<x\le4}\\
+0.125x+0.625 & & {1<x\le2}\\
+0.25x+0.5 & & {-1<x\le1}\\
+0.125x+0.375 & & {-2<x\le-1}\\
+0.03125x+0.1875 & & {-4<x\le-2}\\
+0.015625x+0.125 & & {-8<x\le-4}\\
+0 & & {x\le-8}
+\end{array} \right.
+\end{equation}
+~\\
+
+Our secure distributed algorithm is based on the piecewise linear approximation sigmoid function.
+
+\newpage
+
+\begin{algorithm}
+	\caption{Securely Computing the Piecewise Linear Sigmoid Function}
+	Step 1:
+	\begin{flushleft}
+		Party A generates a random number R and computes y(x$_1$+i)-R for each i. Define m$_i$ = y(x$_1$+i)-R. Party A encrypts each m$_i$ using random noise and gets E(m$_i$,r$_i$).
+	\end{flushleft}
+	Step 2:
+	\begin{flushleft}
+		Party B picks E(m$_{x_2}$,r$_{x_2}$). Rerandomize it and sends E(m$_{x_2}$,r') back to A.
+	\end{flushleft}
+	Step 3:
+	\begin{flushleft}
+		Party A partially decrypts E(m$_{x_2}$,r') and sends the partially decrypted message to B.
+	\end{flushleft}
+	Step 4:
+	\begin{flushleft}
+		Party B finally decrypts the message to get m$_{x_2}$ = y(x$_1$+x$_2$)-R. Note R is noly known to A and m$_2$ is only known to B.
+	\end{flushleft}
+
+\end{algorithm}
+
+Although each party only holds one part of the input to the sigmoid function, this algorithm enables them to compute the approximate value of the function without knowing the part of input from the other party. Actually, in this algorithm, there is no way for each party to explore the input of the other, but the function value can still be computed.
+
+\subsection{Privacy-Preserving method for Computing Product}
+To securely compute product, some existing secure multi-party computation protocols for dot product can be utilized.
+
+\newpage
+
+\begin{algorithm}
+	\caption{Securely computing the scalar Product}
+	\begin{flushleft}
+		
+	Party A with Private vectors {\bfseries x} and B with {\bfseries y}\\
+	for i=1 to N\\
+	\quad A generates random number r$_i$\\
+	\quad A send c$_i$ = E$_pk$(x$_i$,r$_i$) to B\\
+	B computes w = 	$\prod_{i=1}^N c^{y_i}_i$\\
+	B sends w to A
+	A computes z = D$_sk$(w) = {\bfseries x} $\cdot$ {\bfseries y}
+	
+	\end{flushleft}
+	
+\end{algorithm}
+Before applying Algorithm 3, a preprocessing step is needed to convert the input of each party into an asymmetric encrypted text.
+
+\section{Experiments}
+To illustrate the method we use to ensure the security between networks during training, we 
+establish a typical model, 2-party collaborative training of BPN (Back-propagation network).
+As a comparison, we add a test of normal single network finishing the same task. And after that, we let 2 networks communicate without leaking their private data (including input vector and weights).
+
+The algorithms are implemented in Pytorch and complied with Python3.7. The experiments were executed on a virtual machine with Linux 16.04 OS.
+
+The basic setup is classical. We utilize 2 famous datasets in this work, Maruti-data from stock exchange society and Real-Estate-Database from a survey on people's accomodation and fortune.
+Input is divided into 2 parts as private data for networks and they cannot know other's input since. Model is 3-layer linear-sigmoid-linear network. Activation functions are flexible as we can simulate the functions when convenient.
+
+The result figures are displayed below.
+
+\begin{figure}[htbp]
+	\centering
+	\subfigure[the loss during time of single complete network]{
+		\begin{minipage}[t]{0.7\linewidth}
+			\centering
+			\includegraphics[width=2in]{Figure_1.png}
+		\end{minipage}%
+	}%
+	\subfigure[the loss during time of 2-party collaborative networks]{
+		\begin{minipage}[t]{0.7\linewidth}
+			\centering
+			\includegraphics[width=2in]{Figure_2.png}
+		\end{minipage}%
+	}%
+	\centering
+	\caption{Tests on Maruti dataset}
+\end{figure}
+~\\
+
+\begin{figure}[htbp]
+	\centering
+	\subfigure[the loss during time of single complete network]{
+		\begin{minipage}[t]{0.7\linewidth}
+			\centering
+			\includegraphics[width=2in]{Figure_3.png}
+		\end{minipage}%
+	}%
+	\subfigure[the loss during time of 2-party collaborative networks]{
+		\begin{minipage}[t]{0.7\linewidth}
+			\centering
+			\includegraphics[width=2in]{Figure_4.png}
+		\end{minipage}%
+	}%
+	\centering
+	\caption{Tests on Estate dataset}
+\end{figure}
+
+Privacy is protected obviously during process above. While we need to communicate (exchange data  message) in order to learn together just like a single (complete) network. This comunication works through  a encryption-decryption message transfer process, in which two party encode the data only belong to it into cyphertext and send to the other and get a couterpart meanwhile. 
+
+The results of loss function figure have shown that this method also keeps the availability and efficiency of whole training work. Thus we can primitively proove the basic ideas of our work, according to the plan.
+
+\section{Conclusion}
+In this project, we present a efficient but accuracy-promising privacy-preserving method for backpropagation neural network learning. The algorithm guarantees privacy in a standard cryptographic model, the semihonest model.
+
+The drawback of our work is that we only considered backpropagation neural network, and other types of training is to be extended for us.
+
+\end{document}
